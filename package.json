@@ -1,0 +1,22 @@
+{
+  "name": "xingqiu",
+  "version": "1.0.0",
+  "description": "Genshin Impact Information Bot",
+  "main": "src/index.js",
+  "scripts": {
+    "start": "node"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/DJCAYZ/xingqiu.git"
+  },
+  "keywords": [
+    "discord"
+  ],
+  "author": "DJCAYZ <charlesaaron07@gmail.com>",
+  "private": true,
+  "dependencies": {
+    "discord.js": "^14.6.0",
+    "dotenv": "^16.0.3"
+  }
+}
