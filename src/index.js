@@ -38,6 +38,13 @@ class XingqiuBot extends Client {
     (async () => {
       try {
         if (process.env.TESTGUILDID) {
+          const globalCmds = await rest.get(Routes.applicationCommands(clientID));
+          if (globalCmds.length > 0) {
+            for (const globalCmd of globalCmds) {
+              await rest.delete(Routes.applicationCommand(clientID, globalCmd.id));
+            }
+          } 
+          
           const data = await rest.put(Routes.applicationGuildCommands(clientID, guildID), { body: cmdData });
           debug(`Registration of ${data.length} application commands successful.`);
         } else {
@@ -50,7 +57,7 @@ class XingqiuBot extends Client {
     })();
 
 
-    debug('Registering event handlers...');
+    debug('Registering command handlers...');
     this.on('interactionCreate', async interaction => {
       if (!interaction.isChatInputCommand()) return;
 
@@ -64,15 +71,27 @@ class XingqiuBot extends Client {
         await interaction.reply({ content: 'There was an error while executing this command.', ephemeral: true });
       }
     });
+
+    debug('Registering event handlers');
+    const eventsPath = path.join(__dirname, 'events');
+    const eventsFiles = fs.readdirSync(eventsPath).filter(file => file.endsWith('.js'));
+
+    eventsFiles.forEach(eventFile => {
+      const eventPath = path.join(eventsPath, eventFile);
+      const eventModule = require(eventPath);
+
+      if (eventModule.once) {
+        this.once(eventModule.name, (...args) => eventModule.execute(...args));
+      } else {
+        this.on(eventModule.name, (...args) => eventModule.execute(...args));
+      }
+
+    });
   }
 
   start() {
     debug('Xingqiu Bot starting...');
     this.login(process.env.TOKEN);
-    this.once('ready', () => {
-      debug('Xingqiu Bot started.');
-      process.env.TOKEN = '';
-    });
   }
 }
 
