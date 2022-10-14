@@ -16,6 +16,7 @@
   "author": "DJCAYZ <charlesaaron07@gmail.com>",
   "private": true,
   "dependencies": {
+    "debug": "^4.3.4",
     "discord.js": "^14.6.0",
     "dotenv": "^16.0.3"
   }
