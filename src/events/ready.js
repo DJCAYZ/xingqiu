@@ -4,7 +4,7 @@ module.exports = {
   name: 'ready',
   once: true,
   execute: (client) => {
-    debug('Xingqiu bot ready!');
+    console.log('Xingqiu bot ready!');
     debug(`Tag: ${client.user.tag}`);
   } 
 }
